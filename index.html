@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+    <title>Popular Movies</title>
+</head>
+<body>
+    <div class="heading">
+      <h1>POPULAR MOVIE</h1>
+        <img id="cart" src="cart.png" alt="">
+        <p id="cartNum">{{cartnum}}</p>
+        
+    </div>
+    <div id="showMovie">
+        <!-- <movie v-for="items in entries" v-bind:movieimg=items.imgsrc v-bind:title=items.title v-bind:overview=items.overview v-bind:id=items.id></movie> -->
+        <movie v-for="items in entries" v-bind:movieobj=items></movie>
+    </div>
+    
+    
+    <div class="container mt-3" id="summary">
+        <h2>Ticket Summary</h2>          
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="thcol">Movie</th>
+              <th>Adult Tickets</th>
+              <th>Children's Tickets</th>
+              <th>Subtotal</th>
+              <th>Button</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!--  -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="total">
+        <p id="totalA"></p>
+        <p id="totalC"></p>
+      </div>
+    
+
+    <script src="https://unpkg.com/vue"></script>
+    <!-- <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script> -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="movie.js"></script>
+    <!-- <script src="test.js"></script> -->
+
+</body>
+</html>
