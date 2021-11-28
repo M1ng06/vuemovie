@@ -1,11 +1,16 @@
-// var httpRequest = new XMLHttpRequest();
-var ifcreate = [false,false,false]
+//   Poject name: Vue Movie Tickets
+//   Date: 2021/11/28
+//   Name: Rong Chen
+//   File name: movie.js
+
+
+var ifcreate = [false, false, false]
 var adultnum = [0, 0, 0]
 var childnum = [0, 0, 0]
 var num = 3
 var url = "https://api.themoviedb.org/3/movie/popular?api_key=877845e23233313e8824cde8f5a78fbc&language=en-US&page=1"
 
-
+// create movie componemt
 Vue.component('movie', {
     // props: ['movieimg', 'title', 'overview', 'id'],
     // template: `
@@ -50,6 +55,7 @@ Vue.component('movie', {
 
 })
 
+// header, could display the mount of tickets
 var heading = new Vue({
     el: '.heading',
     data: {
@@ -57,6 +63,7 @@ var heading = new Vue({
     }
 })
 
+// movie Schema
 var showmovie = new Vue({
     el: '#showMovie',
     data: {
@@ -83,6 +90,7 @@ var showmovie = new Vue({
     methods: {
 
     },
+    // get the data from web of popular movies
     mounted() {
         axios
             .get(url)
@@ -94,7 +102,6 @@ var showmovie = new Vue({
                     this.entries[index].imgsrc = "https://image.tmdb.org/t/p/w185" + movies[index].poster_path
                     this.entries[index].id = "movie" + (index + 1)
                 }
-                //   this.aryItems = movies
                 console.log(this.entries)
             })
             .catch(function (error) { // fail
@@ -103,28 +110,27 @@ var showmovie = new Vue({
     }
 })
 
-
-// $(document).ready(function(){
-//     $("#summary").hide();
-// });
-
 var totalA = 0
 var totalC = 0
 
+// button add tickets 
 function btnComputer(mWhich, type) {
-    for(let i=1;i<=num;i++){
-        if(mWhich==i && ifcreate[mWhich-1]==false){
-        createthTag(mWhich)
-        break
+    // if there is no movie display, create the 'tr' and 'th' object
+    for (let i = 1; i <= num; i++) {
+        if (mWhich == i && ifcreate[mWhich - 1] == false) {
+            createthTag(mWhich)
+            break
         }
     }
-    // $("#summary").show()
+
     document.getElementById('summary').style.visibility = "visible"
+    // show movie title
     document.getElementById('movie' + mWhich + 'title').innerHTML = showmovie.entries[mWhich - 1].title
+    // show how many tickets and add the icon of delete one ticket, addeventlisterner
     if (type == 'child') {
         childnum[mWhich - 1] += 1
         document.getElementById('movie' + mWhich + 'cNump').innerHTML = childnum[mWhich - 1] + ' X $3.99'
- 
+
         if (document.getElementById('movie' + mWhich + 'cNump').innerHTML != "" && document.getElementById('lessc' + mWhich) == null) {
             document.getElementById('movie' + mWhich + 'cNum').innerHTML += "<img src='less.png' id='lessc" + mWhich + "'>";
             document.getElementById('lessc' + mWhich).addEventListener('click', function () {
@@ -145,9 +151,11 @@ function btnComputer(mWhich, type) {
         }
         totalA += 6.99
     }
+    // show this movie's total cost and remove button
     var subtotal = (adultnum[mWhich - 1] * 6.99 + childnum[mWhich - 1] * 3.99).toFixed(2)
     document.getElementById('movie' + mWhich + 'total').innerHTML = '$' + subtotal
     document.getElementById('movie' + mWhich + 'btn').innerHTML = "<button id='btnremove'+mWhich>Remove</button>"
+    // show the summary costs
     if (totalA != 0)
         document.getElementById('totalA').innerHTML = "Adult Subtotal: " + totalA.toFixed(2)
     if (totalC != 0)
@@ -155,39 +163,46 @@ function btnComputer(mWhich, type) {
 
 }
 
+// when click on delete icon
 function less(mWhich, type) {
     heading.cartnum--
     var id = 'movie' + mWhich + type
+    // subtract from the tickets
+    // if there is only one ticket, then remove the delete icon
     if (type == "cNum") {
         childnum[mWhich - 1]--
         totalC -= 3.99
         if (childnum[mWhich - 1] != 0) {
             document.getElementById(id + 'p').innerHTML = childnum[mWhich - 1] + ' X $3.99'
 
-        } else{
-        document.getElementById(id+'p').innerHTML =""
-        var obj = document.getElementById('lessc'+mWhich);
-        var imgParent = obj.parentNode;
-        imgParent.removeChild(obj);}
+        } else {
+            document.getElementById(id + 'p').innerHTML = ""
+            var obj = document.getElementById('lessc' + mWhich);
+            var imgParent = obj.parentNode;
+            imgParent.removeChild(obj);
+        }
     } else {
         adultnum[mWhich - 1]--
         totalA -= 6.99
         if (adultnum[mWhich - 1] != 0) {
             document.getElementById(id + 'p').innerHTML = adultnum[mWhich - 1] + ' X $6.99'
 
-        } else{
-            document.getElementById(id+'p').innerHTML =""
-            var obj = document.getElementById('lessa'+mWhich);
+        } else {
+            document.getElementById(id + 'p').innerHTML = ""
+            var obj = document.getElementById('lessa' + mWhich);
             var imgParent = obj.parentNode;
             imgParent.removeChild(obj);
         }
     }
+    // this movie total cost
     var subtotal = (adultnum[mWhich - 1] * 6.99 + childnum[mWhich - 1] * 3.99).toFixed(2)
+    // if there is no tickets on this movie, remove the list of this movie
     if (subtotal == 0)
         removeTag(mWhich)
     else
         document.getElementById('movie' + mWhich + 'total').innerHTML = '$' + subtotal
 
+    // caculate the total costs
     if (totalA > 0.1)
         document.getElementById('totalA').innerHTML = "Adult Subtotal: " + totalA.toFixed(2)
     else
@@ -201,7 +216,7 @@ function less(mWhich, type) {
 
 }
 
-
+// create the list of one movie
 function createthTag(mWhich) {
     var trtag = document.createElement('tr')
     trtag.setAttribute('id', "movies" + mWhich)
@@ -222,30 +237,33 @@ function createthTag(mWhich) {
             document.getElementById(aryid[i]).appendChild(ptag)
         }
     }
+    // add listener on remove button
     document.getElementById('movie' + mWhich + 'btn').addEventListener('click', function () {
         removeTag(mWhich)
         removeNum(mWhich)
     })
-    for(let i=1;i<=num;i++){
-        if(mWhich==i) {
-            ifcreate[mWhich-1] =true
+    for (let i = 1; i <= num; i++) {
+        if (mWhich == i) {
+            ifcreate[mWhich - 1] = true
             break
-        } 
+        }
     }
 }
 
+// when click on remove button, remove the list of this movie
 function removeTag(mWhich) {
     var obj = document.getElementById("movies" + mWhich);
     var imgParent = obj.parentNode;
     imgParent.removeChild(obj);
-    for(let i=1;i<=num;i++){
-        if(mWhich==i) {
-            ifcreate[mWhich-1] =false
+    for (let i = 1; i <= num; i++) {
+        if (mWhich == i) {
+            ifcreate[mWhich - 1] = false
             break
-        } 
+        }
     }
 }
 
+// when click on remove button, remove the number and costs of this movie
 function removeNum(mWhich) {
     var childN = childnum[mWhich - 1]
     var adultN = adultnum[mWhich - 1]
